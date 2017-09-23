@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { View, TextInput, Text, Button } from 'react-native';
+import { View, TextInput, Text, Button, Image, TouchableWithoutFeedback, TouchableOpacity, Keyboard, Dimensions, ImageBackground, StatusBar } from 'react-native';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {addTodo, toggleTodo, deleteTodo} from '../actions/todo.js';
+
+const { width, height } = Dimensions.get('window')
 
 const mapStateToProps = (state) => {
   return {
@@ -23,67 +25,57 @@ class Todo extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.todos !== nextProps.todos) {
-      this.setState({
-        todos: nextProps.todos
-      })
-    }
-  }
-
-
-
-  createTodo = () => {
-    let {todos} = this.state;
-    this.props.addTodo({
-      id: () => {
-        let last = Math.max.apply(...this.todos);
-        return last.id + 1
-      },
-      content: this.state.value,
-      checked: false,
-    })
-    this.setState({
-      value: null,
-    });
-  }
-
-  handleToggle = (toggleTodo) => {
-    this.props.toggleTodo(toggleTodo);
-  }
-
-  handleRemove = (todo) => {
-    this.props.deleteTodo(todo);
-  }
-
-  showTodoList = () => {
-    return this.state.todos.map((todo, index) => {
-      return (
-        <View key={`todo_${index}`} style={{flexDirection: 'row', padding: 10,}}>
-          <Button title="完成" onPress={() => this.handleToggle(todo)} />
-          <Text style={{textDecorationLine: (todo.checked ? 'line-through' : 'none')}}>{todo.content} : {todo.id}</Text>
-          <Button title="刪除" onPress={() => this.handleRemove(todo)} />
-        </View>
-      );
-    })
-  }
-
   render() {
     console.log(this.state.todos);
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <TextInput
-          style={{width: '80%', borderBottomWidth: 1, borderBottomColor: '#aaaaaa'}}
-          placeholder="輸入待做事項..."
-          value={this.state.value}
-          onChangeText={(value) => this.setState({value})}
-        />
-        <Button title="送出" onPress={() => this.createTodo()} color="#c40000" />
-        {/* todo list */}
-        <View style={{width: '100%', borderTopWidth: 2}}>
-          {this.showTodoList()}
-        </View>
-      </View>
+      <ImageBackground
+      style={{flex: 1, backgroundColor: 'transparent'}}
+      imageStyle={{width: undefined, height: undefined}}
+      source={{uri: 'https://c1.staticflickr.com/9/8601/16004758626_7335d84ffd_b.jpg'}}
+      >
+        <TouchableWithoutFeedback
+          onPress={() => Keyboard.dismiss()}>
+          <View style={{flex: 1, justifyContent: 'space-around', alignItems: 'center'}}>
+            <StatusBar barStyle="light-content"/>
+            <Text
+            numberOfLines={1}
+            style={{fontSize: 30, backgroundColor: 'transparent', color: '#aaf', textShadowOffset: {width: 1, height: 1}, textShadowColor: '#ccc'}}
+            >
+            參加聖杯戰爭吧!!!
+            </Text>
+            <View>
+            <TextInput
+              style={{width: 300, height: 36, backgroundColor: '#fff', marginTop: 20, paddingLeft: 10}}
+              maxLength={8}
+              keyboardType='phone-pad'
+              placeholder="帳號"
+            />
+            <TextInput
+              style={{width: 300, height: 36, backgroundColor: '#fff', marginTop: 20, paddingLeft: 10}}
+              secureTextEntry={true}
+              maxLength={8}
+              placeholder="密碼"
+            />
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => alert('xxxx')}
+            >
+            <Text
+              style={{
+                fontWeight: '900',
+                marginTop: 20,
+                backgroundColor: '#dddd00',
+                color: '#fff',
+                width: 300, height: 30,
+                fontSize: 20, textAlign: 'center',
+                paddingTop: 5}}>
+              登入</Text>
+            </TouchableOpacity>
+            </View>
+         </View>
+        </TouchableWithoutFeedback>
+      </ImageBackground>
+
     );
   }
 }
